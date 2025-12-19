@@ -33,12 +33,12 @@ Kami menambahkan kolom **Params** (Parameter) untuk melihat korelasi antara ukur
 #### Skenario A: Full Data (Tanpa Downsampling) 🏆
 Menggunakan seluruh 5,732 data (Imbalanced). Strategi ini terbukti memberikan hasil terbaik.
 
-| Model | Checkpoint | Size (Params) | Accuracy | F1-Macro | Status |
+| Model | Checkpoint | Size (Params) | Accuracy | F1-Macro |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **IndoBERT Base P1** | `indobenchmark/indobert-base-p1` | **~110M** | **77.13%** | **63.28%** | ✅ **Selected** |
-| IndoBERT Base IndoLEM | `indolem/indobert-base-uncased` | ~110M | 76.09% | 65.05% | 🥈 Runner Up |
-| XLM-RoBERTa Large | `xlm-roberta-large` | ~560M | 74.34% | 60.65% | Underfitting |
-| IndoBERT Large (IndoNLU) | `indobenchmark/indobert-large-p2` | ~335M | 74.17% | 42.58% | ❌ Failed |
+| **IndoBERT Base P1** | `indobenchmark/indobert-base-p1` | **~110M** | **76.13%** | **66.11%** |
+| IndoBERT Base IndoLEM | `indolem/indobert-base-uncased` | ~110M | 74.69% | 61.19% |
+| XLM-RoBERTa Large | `xlm-roberta-large` | ~560M | 74.34% | 60.65% |
+| IndoBERT Large (IndoNLU) | `indobenchmark/indobert-large-p2` | ~335M | 74.17% | 42.58% |
 
 #### Skenario B: Balanced Data (Downsampling)
 Menyamakan jumlah data Positif dan Negatif (Rasio 1:1). Meskipun F1-Score lebih seimbang, akurasi total turun signifikan karena banyaknya data yang dibuang.
