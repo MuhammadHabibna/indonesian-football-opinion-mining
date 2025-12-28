@@ -34,7 +34,7 @@ Kami menambahkan kolom **Params** (Parameter) untuk melihat korelasi antara ukur
 Menggunakan seluruh 5,732 data (Imbalanced). Strategi ini terbukti memberikan hasil terbaik.
 
 | Model | Checkpoint | Size (Params) | Accuracy | F1-Macro |
-| :--- | :--- | :--- | :--- | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- |
 | **IndoBERT Base P1** | `indobenchmark/indobert-base-p1` | **~110M** | **76.13%** | **66.11%** |
 | IndoBERT Base IndoLEM | `indolem/indobert-base-uncased` | ~110M | 74.69% | 61.19% |
 | XLM-RoBERTa Large | `xlm-roberta-large` | ~560M | 74.34% | 60.65% |
