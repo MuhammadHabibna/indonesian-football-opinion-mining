@@ -1,4 +1,4 @@
-# 🇮🇩 Analisis Sentimen & Deteksi Sarkasme: Timnas Indonesia
+# 🇮🇩 Analisis Sentimen & Deteksi Sarkasme: Timnas Indonesia terhadap Coach Shin Tae Yong
 
 Proyek ini bertujuan untuk menganalisis opini publik terhadap **Timnas Indonesia** (pemain, pelatih Shin Tae-yong, dan pundit) menggunakan pendekatan *Deep Learning* berbasis Transformer.
 
