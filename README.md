@@ -22,7 +22,48 @@ Dataset yang digunakan mengalami penyusutan melalui tahapan *preprocessing* dan 
 
 ---
 
-## 📌 Modul 1: Sentiment Analysis
+## 🧩 Modul 1: Aspect-Based Sentiment Classification (ASBC)
+
+Analisis sentimen umum terkadang tidak cukup untuk memberikan *insight* yang tajam. Untuk memahami **mengapa** masyarakat memberikan sentimen tertentu, penelitian ini menerapkan **Aspect-Based Sentiment Classification (ASBC)** untuk mengelompokkan komentar ke dalam entitas atau topik spesifik.
+
+### 🏗️ Arsitektur Ekstraksi Aspek
+Pendekatan yang digunakan adalah **Lexicon-Based Aspect Extraction** dengan logika **Smart Priority**. Mengingat satu komentar seringkali menyebutkan beberapa entitas (misal: menyebut Coach STY dan Pemain sekaligus), sistem ini dirancang untuk menentukan aspek dominan berdasarkan bobot kepentingan.
+
+#### **1. Kategorisasi Entitas (Aspect Lexicon)**
+Data dikelompokkan ke dalam 9 kategori utama yang mencakup seluruh ekosistem sepak bola Indonesia:
+* **Coaching Staff**: Coach_STY, Coach_Indra, Coach_Kluivert (Rumor).
+* **Management/Federasi**: Mgmt_ET (Erick Thohir), Mgmt_Arya, Mgmt_General (PSSI).
+* **Technical**: Player (Skuad Timnas/Naturalisasi), Match_Issues (Wasit, Stadion, AFC).
+* **Media**: Pundit (Bung Towel, Coach Justin, dll).
+
+#### **2. Logika Smart Priority**
+Untuk menangani ambiguitas, fungsi `get_dominant_aspect_smart` menggunakan sistem peringkat (`ASPECT_PRIORITY`). Jika terjadi skor kemunculan kata kunci yang sama, model akan memprioritaskan entitas strategis (seperti Pelatih Kepala atau Ketum PSSI) terlebih dahulu.
+
+### 📊 Distribusi Aspek (Topik Perbincangan)
+Setelah dilakukan pelabelan aspek pada seluruh dataset, berikut adalah distribusi topik yang paling banyak diperbincangkan oleh netizen:
+
+| Rank | Aspect Category | Count | Persentase (Estimasi) |
+| :--- | :--- | :--- | :--- |
+| 1 | **General** | 2,465 | 34.6% |
+| 2 | **Coach_STY** | 1,584 | 22.2% |
+| 3 | **Player** | 1,325 | 18.6% |
+| 4 | **Mgmt_ET** | 572 | 8.0% |
+| 5 | **Mgmt_General** | 272 | 3.8% |
+| 6 | **Pundit** | 259 | 3.6% |
+| 7 | **Coach_Indra** | 186 | 2.6% |
+| 8 | **Coach_Kluivert** | 137 | 1.9% |
+| 9 | **Match_Issues** | 130 | 1.8% |
+| 10 | **Mgmt_Arya** | 115 | 1.6% |
+
+### 🔍 Key Insights dari ASBC
+1. **Dominasi Figur Pelatih & Pemain**: Gabungan aspek `Coach_STY` dan `Player` mencakup lebih dari 40% perbincangan. Ini menunjukkan bahwa performa teknis di lapangan adalah pemicu utama dinamika sentimen netizen.
+2. **Kritik Manajemen**: Kehadiran aspek `Mgmt_ET` di peringkat 4 besar menunjukkan bahwa kebijakan federasi dan kepemimpinan Erick Thohir menjadi perhatian serius masyarakat di samping hasil pertandingan.
+3. **Fenomena Pundit**: Meskipun jumlahnya lebih kecil, aspek `Pundit` (seperti Bung Towel) memiliki basis massa perbincangan yang cukup konsisten, menunjukkan adanya polarisasi opini di luar aspek teknis bola.
+
+---
+
+
+## 📌 Modul 2: Sentiment Analysis
 
 Pada tahap ini, dilakukan *benchmarking* terhadap varian model BERT (Base vs Large) dengan dua strategi data yang berbeda: **Imbalanced (Full Data)** dan **Balanced (Downsampling)**.
 
@@ -69,7 +110,7 @@ Berikut adalah detail konfigurasi parameter. Kami membedakan strategi untuk **Mo
 
 ---
 
-## 🤡 Modul 2: Sarcasm Detection (Benchmark Phase)
+## 🤡 Modul 3: Sarcasm Detection (Benchmark Phase)
 
 Pada tahap ini, fokus utama adalah melatih model untuk mendeteksi nuansa **sarkasme** pada komentar media sosial. Deteksi sarkasme sangat krusial karena model sentimen tradisional sering kali terkecoh oleh kata-kata positif yang sebenarnya bermakna negatif (ironi).
 
