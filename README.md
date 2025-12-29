@@ -89,6 +89,12 @@ Berikut adalah hasil evaluasi model pada dataset sarkasme yang telah melalui pro
 | **IndoBERT-large-p2** | **85.07%** | 0.4842 | ⚠️ Majority Class Bias |
 | **DeBERTa-v3-base** | 84.88% | 0.4591 | ❌ Model Collapse |
 
+### 📏 Evaluation Metrics Explained
+Untuk memastikan evaluasi yang objektif, model dinilai menggunakan dua metrik utama:
+
+1. **Accuracy**: Digunakan sebagai gambaran umum performa model pada seluruh dataset.
+2. **F1-Macro**: Digunakan sebagai metrik utama pengambilan keputusan. Metrik ini memperlakukan kelas minoritas (Sarkas) dan mayoritas (Non-Sarkas) secara setara. Skor F1-Macro yang rendah pada model Large/DeBERTa menunjukkan bahwa model tersebut mengalami bias kelas mayoritas, sedangkan skor yang lebih tinggi pada **IndoBERT-Base** membuktikan efektivitasnya dalam mengenali pola sarkasme yang langka dalam data.
+
 
 ### 🔍 Analisis Mendalam (Key Insights)
 
