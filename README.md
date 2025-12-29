@@ -1,4 +1,4 @@
-# 🇮🇩 Analisis Sentimen & Deteksi Sarkasme: Timnas Indonesia
+# 🇮🇩 Analisis Sentimen & Deteksi Sarkasme: Timnas Indonesia terhadap Coach Shin Tae Yong
 
 Proyek ini bertujuan untuk menganalisis opini publik terhadap **Timnas Indonesia** (pemain, pelatih Shin Tae-yong, dan pundit) menggunakan pendekatan *Deep Learning* berbasis Transformer.
 
@@ -22,7 +22,48 @@ Dataset yang digunakan mengalami penyusutan melalui tahapan *preprocessing* dan 
 
 ---
 
-## 📌 Modul 1: Sentiment Analysis
+## 🧩 Modul 1: Aspect-Based Sentiment Classification (ASBC)
+
+Analisis sentimen umum terkadang tidak cukup untuk memberikan *insight* yang tajam. Untuk memahami **mengapa** masyarakat memberikan sentimen tertentu, penelitian ini menerapkan **Aspect-Based Sentiment Classification (ASBC)** untuk mengelompokkan komentar ke dalam entitas atau topik spesifik.
+
+### 🏗️ Arsitektur Ekstraksi Aspek
+Pendekatan yang digunakan adalah **Lexicon-Based Aspect Extraction** dengan logika **Smart Priority**. Mengingat satu komentar seringkali menyebutkan beberapa entitas (misal: menyebut Coach STY dan Pemain sekaligus), sistem ini dirancang untuk menentukan aspek dominan berdasarkan bobot kepentingan.
+
+#### **1. Kategorisasi Entitas (Aspect Lexicon)**
+Data dikelompokkan ke dalam 9 kategori utama yang mencakup seluruh ekosistem sepak bola Indonesia:
+* **Coaching Staff**: Coach_STY, Coach_Indra, Coach_Kluivert (Rumor).
+* **Management/Federasi**: Mgmt_ET (Erick Thohir), Mgmt_Arya, Mgmt_General (PSSI).
+* **Technical**: Player (Skuad Timnas/Naturalisasi), Match_Issues (Wasit, Stadion, AFC).
+* **Media**: Pundit (Bung Towel, Coach Justin, dll).
+
+#### **2. Logika Smart Priority**
+Untuk menangani ambiguitas, fungsi `get_dominant_aspect_smart` menggunakan sistem peringkat (`ASPECT_PRIORITY`). Jika terjadi skor kemunculan kata kunci yang sama, model akan memprioritaskan entitas strategis (seperti Pelatih Kepala atau Ketum PSSI) terlebih dahulu.
+
+### 📊 Distribusi Aspek (Topik Perbincangan)
+Setelah dilakukan pelabelan aspek pada seluruh dataset, berikut adalah distribusi topik yang paling banyak diperbincangkan oleh netizen:
+
+| Rank | Aspect Category | Count | Persentase (Estimasi) |
+| :--- | :--- | :--- | :--- |
+| 1 | **General** | 2,465 | 34.6% |
+| 2 | **Coach_STY** | 1,584 | 22.2% |
+| 3 | **Player** | 1,325 | 18.6% |
+| 4 | **Mgmt_ET** | 572 | 8.0% |
+| 5 | **Mgmt_General** | 272 | 3.8% |
+| 6 | **Pundit** | 259 | 3.6% |
+| 7 | **Coach_Indra** | 186 | 2.6% |
+| 8 | **Coach_Kluivert** | 137 | 1.9% |
+| 9 | **Match_Issues** | 130 | 1.8% |
+| 10 | **Mgmt_Arya** | 115 | 1.6% |
+
+### 🔍 Key Insights dari ASBC
+1. **Dominasi Figur Pelatih & Pemain**: Gabungan aspek `Coach_STY` dan `Player` mencakup lebih dari 40% perbincangan. Ini menunjukkan bahwa performa teknis di lapangan adalah pemicu utama dinamika sentimen netizen.
+2. **Kritik Manajemen**: Kehadiran aspek `Mgmt_ET` di peringkat 4 besar menunjukkan bahwa kebijakan federasi dan kepemimpinan Erick Thohir menjadi perhatian serius masyarakat di samping hasil pertandingan.
+3. **Fenomena Pundit**: Meskipun jumlahnya lebih kecil, aspek `Pundit` (seperti Bung Towel) memiliki basis massa perbincangan yang cukup konsisten, menunjukkan adanya polarisasi opini di luar aspek teknis bola.
+
+---
+
+
+## 📌 Modul 2: Sentiment Analysis
 
 Pada tahap ini, dilakukan *benchmarking* terhadap varian model BERT (Base vs Large) dengan dua strategi data yang berbeda: **Imbalanced (Full Data)** dan **Balanced (Downsampling)**.
 
@@ -33,12 +74,12 @@ Kami menambahkan kolom **Params** (Parameter) untuk melihat korelasi antara ukur
 #### Skenario A: Full Data (Tanpa Downsampling) 🏆
 Menggunakan seluruh 5,732 data (Imbalanced). Strategi ini terbukti memberikan hasil terbaik.
 
-| Model | Checkpoint | Size (Params) | Accuracy | F1-Macro | Status |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **IndoBERT Base P1** | `indobenchmark/indobert-base-p1` | **~110M** | **77.13%** | **63.28%** | ✅ **Selected** |
-| IndoBERT Base IndoLEM | `indolem/indobert-base-uncased` | ~110M | 76.09% | 65.05% | 🥈 Runner Up |
-| XLM-RoBERTa Large | `xlm-roberta-large` | ~560M | 74.34% | 60.65% | Underfitting |
-| IndoBERT Large (IndoNLU) | `indobenchmark/indobert-large-p2` | ~335M | 74.17% | 42.58% | ❌ Failed |
+| Model | Checkpoint | Size (Params) | Accuracy | F1-Macro |
+| :--- | :--- | :--- | :--- | :--- |
+| **IndoBERT Base P1** | `indobenchmark/indobert-base-p1` | **~110M** | **76.13%** | **66.11%** |
+| IndoBERT Base IndoLEM | `indolem/indobert-base-uncased` | ~110M | 74.69% | 61.19% |
+| XLM-RoBERTa Large | `xlm-roberta-large` | ~560M | 74.34% | 60.65% |
+| IndoBERT Large (IndoNLU) | `indobenchmark/indobert-large-p2` | ~335M | 74.17% | 42.58% |
 
 #### Skenario B: Balanced Data (Downsampling)
 Menyamakan jumlah data Positif dan Negatif (Rasio 1:1). Meskipun F1-Score lebih seimbang, akurasi total turun signifikan karena banyaknya data yang dibuang.
@@ -69,9 +110,41 @@ Berikut adalah detail konfigurasi parameter. Kami membedakan strategi untuk **Mo
 
 ---
 
-## 🔜 Modul 2: Sarcasm Detection (Next Phase)
+## 🤡 Modul 3: Sarcasm Detection (Benchmark Phase)
 
-Tahap selanjutnya akan membangun model khusus untuk **Sarkasme** menggunakan dataset yang sama, dengan pendekatan fine-tuning **IndoBERT Base** dan fitur linguistik kontekstual.
+Pada tahap ini, fokus utama adalah melatih model untuk mendeteksi nuansa **sarkasme** pada komentar media sosial. Deteksi sarkasme sangat krusial karena model sentimen tradisional sering kali terkecoh oleh kata-kata positif yang sebenarnya bermakna negatif (ironi).
+
+### 🧪 Metodologi & Eksperimen
+Eksperimen dilakukan dengan membandingkan tiga arsitektur *State-of-the-Art* (SOTA) untuk melihat model mana yang paling mampu menangkap kontradiksi linguistik dalam Bahasa Indonesia:
+
+1.  **IndoBERT-base-p1**: Model dasar (baseline) dengan 12 lapisan Transformer.
+2.  **IndoBERT-large-p2**: Model yang lebih dalam (24 lapisan) untuk pemahaman konteks yang lebih kompleks.
+3.  **DeBERTa-v3-base**: Menggunakan mekanisme *Disentangled Attention* yang memisahkan posisi kata dari maknanya.
+
+### 📊 Hasil Benchmarking
+Berikut adalah hasil evaluasi model pada dataset sarkasme yang telah melalui proses *balancing* secara stratifikasi:
+
+| Arsitektur Model | Accuracy | F1-Macro (Best) | Status |
+| :--- | :---: | :---: | :--- |
+| **IndoBERT-base-p1** | 76.35% | **0.6707** | ✅ **Optimal (Learning)** |
+| **IndoBERT-large-p2** | **85.07%** | 0.4842 | ⚠️ Majority Class Bias |
+| **DeBERTa-v3-base** | 84.88% | 0.4591 | ❌ Model Collapse |
+
+### 📏 Evaluation Metrics Explained
+Untuk memastikan evaluasi yang objektif, model dinilai menggunakan dua metrik utama:
+
+1. **Accuracy**: Digunakan sebagai gambaran umum performa model pada seluruh dataset.
+2. **F1-Macro**: Digunakan sebagai metrik utama pengambilan keputusan. Metrik ini memperlakukan kelas minoritas (Sarkas) dan mayoritas (Non-Sarkas) secara setara. Skor F1-Macro yang rendah pada model Large/DeBERTa menunjukkan bahwa model tersebut mengalami bias kelas mayoritas, sedangkan skor yang lebih tinggi pada **IndoBERT-Base** membuktikan efektivitasnya dalam mengenali pola sarkasme yang langka dalam data.
+
+
+### 🔍 Analisis Mendalam (Key Insights)
+
+* **Ilusi Akurasi**: Secara sekilas, IndoBERT-large dan DeBERTa memiliki akurasi yang lebih tinggi (~85%). Namun, nilai **F1-Macro** yang rendah menunjukkan adanya *Majority Class Bias*. Model cenderung menebak semua data sebagai "Non-Sarkas" untuk menurunkan nilai *Loss* secara instan tanpa benar-benar mempelajari pola sarkasme.
+* **Stabilitas IndoBERT-base**: Meskipun akurasinya lebih rendah, IndoBERT-base adalah satu-satunya model yang menunjukkan kenaikan F1-Macro yang konsisten di setiap epoch. Hal ini membuktikan bahwa model base lebih adaptif dalam mengenali pola sarkasme pada dataset yang terbatas dibandingkan model raksasa yang cenderung mengalami *overfitting* atau *stagnasi*.
+* **Data Imbalance**: Eksperimen ini mengonfirmasi bahwa dalam deteksi sarkasme, **F1-Macro** adalah metrik yang jauh lebih jujur dibandingkan **Accuracy** untuk mengukur kemampuan model dalam mengenali kelas minoritas (sarkasme).
+
+### 💡 Kesimpulan
+Model **IndoBERT-base-p1** dipilih sebagai model terbaik untuk tahap ini karena kemampuannya yang stabil dalam mempelajari fitur linguistik sarkasme. Model ini nantinya akan diintegrasikan dengan modul analisis sentimen untuk meningkatkan akurasi interpretasi makna akhir.
 
 ---
 
