@@ -69,9 +69,35 @@ Berikut adalah detail konfigurasi parameter. Kami membedakan strategi untuk **Mo
 
 ---
 
-## 🔜 Modul 2: Sarcasm Detection (Next Phase)
+## 🤡 Modul 2: Sarcasm Detection (Benchmark Phase)
 
-Tahap selanjutnya akan membangun model khusus untuk **Sarkasme** menggunakan dataset yang sama, dengan pendekatan fine-tuning **IndoBERT Base** dan fitur linguistik kontekstual.
+Pada tahap ini, fokus utama adalah melatih model untuk mendeteksi nuansa **sarkasme** pada komentar media sosial. Deteksi sarkasme sangat krusial karena model sentimen tradisional sering kali terkecoh oleh kata-kata positif yang sebenarnya bermakna negatif (ironi).
+
+### 🧪 Metodologi & Eksperimen
+Eksperimen dilakukan dengan membandingkan tiga arsitektur *State-of-the-Art* (SOTA) untuk melihat model mana yang paling mampu menangkap kontradiksi linguistik dalam Bahasa Indonesia:
+
+1.  **IndoBERT-base-p1**: Model dasar (baseline) dengan 12 lapisan Transformer.
+2.  **IndoBERT-large-p2**: Model yang lebih dalam (24 lapisan) untuk pemahaman konteks yang lebih kompleks.
+3.  **DeBERTa-v3-base**: Menggunakan mekanisme *Disentangled Attention* yang memisahkan posisi kata dari maknanya.
+
+### 📊 Hasil Benchmarking
+Berikut adalah hasil evaluasi model pada dataset sarkasme yang telah melalui proses *balancing* secara stratifikasi:
+
+| Arsitektur Model | Accuracy | F1-Macro (Best) | Status |
+| :--- | :---: | :---: | :--- |
+| **IndoBERT-base-p1** | 76.35% | **0.6707** | ✅ **Optimal (Learning)** |
+| **IndoBERT-large-p2** | **85.07%** | 0.4842 | ⚠️ Majority Class Bias |
+| **DeBERTa-v3-base** | 84.88% | 0.4591 | ❌ Model Collapse |
+
+
+### 🔍 Analisis Mendalam (Key Insights)
+
+* **Ilusi Akurasi**: Secara sekilas, IndoBERT-large dan DeBERTa memiliki akurasi yang lebih tinggi (~85%). Namun, nilai **F1-Macro** yang rendah menunjukkan adanya *Majority Class Bias*. Model cenderung menebak semua data sebagai "Non-Sarkas" untuk menurunkan nilai *Loss* secara instan tanpa benar-benar mempelajari pola sarkasme.
+* **Stabilitas IndoBERT-base**: Meskipun akurasinya lebih rendah, IndoBERT-base adalah satu-satunya model yang menunjukkan kenaikan F1-Macro yang konsisten di setiap epoch. Hal ini membuktikan bahwa model base lebih adaptif dalam mengenali pola sarkasme pada dataset yang terbatas dibandingkan model raksasa yang cenderung mengalami *overfitting* atau *stagnasi*.
+* **Data Imbalance**: Eksperimen ini mengonfirmasi bahwa dalam deteksi sarkasme, **F1-Macro** adalah metrik yang jauh lebih jujur dibandingkan **Accuracy** untuk mengukur kemampuan model dalam mengenali kelas minoritas (sarkasme).
+
+### 💡 Kesimpulan
+Model **IndoBERT-base-p1** dipilih sebagai model terbaik untuk tahap ini karena kemampuannya yang stabil dalam mempelajari fitur linguistik sarkasme. Model ini nantinya akan diintegrasikan dengan modul analisis sentimen untuk meningkatkan akurasi interpretasi makna akhir.
 
 ---
 
