@@ -4,7 +4,7 @@ Proyek ini bertujuan untuk menganalisis opini publik terhadap **Timnas Indonesia
 
 Fokus utama penelitian ini dibagi menjadi dua modul terpisah:
 1.  **Sentiment Analysis:** Mengklasifikasikan komentar menjadi Positif atau Negatif.
-2.  **Sarcasm Detection:** (Coming Soon) Mendeteksi nuansa sarkasme yang sering muncul dalam komentar sepak bola.
+2.  **Sarcasm Detection:** Mendeteksi nuansa sarkasme yang sering muncul dalam komentar sepak bola.
 
 ---
 
