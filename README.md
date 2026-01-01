@@ -2,9 +2,10 @@
 
 Proyek ini bertujuan untuk menganalisis opini publik terhadap **Timnas Indonesia** (pemain, pelatih Shin Tae-yong, dan pundit) menggunakan pendekatan *Deep Learning* berbasis Transformer.
 
-Fokus utama penelitian ini dibagi menjadi dua modul terpisah:
-1.  **Sentiment Analysis:** Mengklasifikasikan komentar menjadi Positif atau Negatif.
-2.  **Sarcasm Detection:** Mendeteksi nuansa sarkasme yang sering muncul dalam komentar sepak bola.
+Fokus utama penelitian ini dibagi menjadi tiga modul terpisah:
+1. **Aspect Based Sentiment Classification:** Mengklasifikasikan komentar berdasarkan siapa?
+2.  **Sentiment Analysis:** Mengklasifikasikan komentar menjadi Positif atau Negatif.
+3.  **Sarcasm Detection:** Mendeteksi nuansa sarkasme yang sering muncul dalam komentar sepak bola.
 
 ---
 
